@@ -1,13 +1,13 @@
 package clickhouse
 
 import (
-	"github.com/mintance/go-clickhouse"
-	"github.com/mintance/nginx-clickhouse/config"
-	"github.com/mintance/nginx-clickhouse/nginx"
-	"github.com/satyrius/gonx"
 	"net/url"
 	"reflect"
+
 	"github.com/Sirupsen/logrus"
+	"github.com/satyrius/gonx"
+	"github.com/vdv/nginx-clickhouse/config"
+	"github.com/vdv/nginx-clickhouse/nginx"
 )
 
 var clickHouseStorage *clickhouse.Conn

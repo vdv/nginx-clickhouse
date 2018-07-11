@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/Sirupsen/logrus"
-	"github.com/hpcloud/tail"
-	"github.com/mintance/nginx-clickhouse/clickhouse"
-	configParser "github.com/mintance/nginx-clickhouse/config"
-	"github.com/mintance/nginx-clickhouse/nginx"
 	"sync"
 	"time"
+
+	"github.com/Sirupsen/logrus"
+	"github.com/hpcloud/tail"
+	"github.com/vdv/nginx-clickhouse/clickhouse"
+	configParser "github.com/vdv/nginx-clickhouse/config"
+	"github.com/vdv/nginx-clickhouse/nginx"
 )
 
 var (

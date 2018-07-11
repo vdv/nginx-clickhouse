@@ -2,11 +2,12 @@ package config
 
 import (
 	"flag"
-	"github.com/Sirupsen/logrus"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"strconv"
+
+	"github.com/Sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
