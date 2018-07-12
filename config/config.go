@@ -20,7 +20,7 @@ type Config struct {
 		Table       string            `yaml:"table"`
 		Host        string            `yaml:"host"`
 		Port        string            `yaml:"port"`
-		Columns     map[string]string `yaml:"columns"`
+		Columns     map[string]Column `yaml:"columns"`
 		Credentials struct {
 			User     string `yaml:"user"`
 			Password string `yaml:"password"`
@@ -30,6 +30,11 @@ type Config struct {
 		LogType   string `yaml:"log_type"`
 		LogFormat string `yaml:"log_format"`
 	}
+}
+
+type Column struct {
+	VarName string `yaml:"var_name"`
+	VarType string `yaml:"var_type"`
 }
 
 var configPath string

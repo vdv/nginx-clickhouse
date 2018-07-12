@@ -5,12 +5,13 @@ import (
 	"reflect"
 
 	"github.com/Sirupsen/logrus"
+	goClickhouse "github.com/mintance/go-clickhouse"
 	"github.com/satyrius/gonx"
 	"github.com/vdv/nginx-clickhouse/config"
 	"github.com/vdv/nginx-clickhouse/nginx"
 )
 
-var clickHouseStorage *clickhouse.Conn
+var clickHouseStorage *goClickhouse.Conn
 
 func Save(config *config.Config, logs []gonx.Entry) error {
 
@@ -24,7 +25,7 @@ func Save(config *config.Config, logs []gonx.Entry) error {
 
 	rows := buildRows(columns, config.ClickHouse.Columns, logs)
 
-	query, err := clickhouse.BuildMultiInsert(
+	query, err := goClickhouse.BuildMultiInsert(
 		config.ClickHouse.Db+"."+config.ClickHouse.Table,
 		columns,
 		rows,
@@ -37,7 +38,7 @@ func Save(config *config.Config, logs []gonx.Entry) error {
 	return query.Exec(storage)
 }
 
-func getColumns(columns map[string]string) []string {
+func getColumns(columns map[string]config.Column) []string {
 
 	keys := reflect.ValueOf(columns).MapKeys()
 	stringColumns := make([]string, len(keys))
@@ -49,13 +50,13 @@ func getColumns(columns map[string]string) []string {
 	return stringColumns
 }
 
-func buildRows(keys []string, columns map[string]string, data []gonx.Entry) (rows clickhouse.Rows) {
+func buildRows(keys []string, columns map[string]config.Column, data []gonx.Entry) (rows goClickhouse.Rows) {
 
 	for _, logEntry := range data {
-		row := clickhouse.Row{}
+		row := goClickhouse.Row{}
 
 		for _, column := range keys {
-			value, err := logEntry.Field(columns[column])
+			value, err := logEntry.Field(columns[column].VarName)
 			if err != nil {
 				logrus.Errorf("error to build rows: %v", err)
 			}
@@ -68,14 +69,14 @@ func buildRows(keys []string, columns map[string]string, data []gonx.Entry) (row
 	return rows
 }
 
-func getStorage(config *config.Config) (*clickhouse.Conn, error) {
+func getStorage(config *config.Config) (*goClickhouse.Conn, error) {
 
 	if clickHouseStorage != nil {
 		return clickHouseStorage, nil
 	}
 
-	cHTTP := clickhouse.NewHttpTransport()
-	conn := clickhouse.NewConn(config.ClickHouse.Host+":"+config.ClickHouse.Port, cHTTP)
+	cHTTP := goClickhouse.NewHttpTransport()
+	conn := goClickhouse.NewConn(config.ClickHouse.Host+":"+config.ClickHouse.Port, cHTTP)
 
 	params := url.Values{}
 	params.Add("user", config.ClickHouse.Credentials.User)

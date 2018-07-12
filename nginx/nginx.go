@@ -24,11 +24,11 @@ func GetParser(config *config.Config) (*gonx.Parser, error) {
 	return gonx.NewNginxParser(nginxConfig, config.Nginx.LogType)
 }
 
-func ParseField(key string, value string) interface{} {
+func ParseField(column config.Column, value string) interface{} {
+	key := column.VarName
 
-	switch key {
-	case "time_local":
-
+	switch column.VarType {
+	case "datetime":
 		t, err := time.Parse(config.NginxTimeLayout, value)
 
 		if err == nil {
@@ -37,9 +37,7 @@ func ParseField(key string, value string) interface{} {
 
 		return value
 
-	case "remote_addr", "remote_user", "request", "http_referer", "http_user_agent", "request_method", "https":
-		return value
-	case "bytes_sent", "connections_waiting", "connections_active", "status":
+	case "integer":
 		if value == "-" {
 			value = "-1"
 		}
@@ -54,7 +52,7 @@ func ParseField(key string, value string) interface{} {
 		}
 
 		return val
-	case "request_time", "upstream_connect_time", "upstream_header_time", "upstream_response_time":
+	case "float":
 		if value == "-" {
 			value = "-1"
 		}
@@ -70,9 +68,6 @@ func ParseField(key string, value string) interface{} {
 
 		return val
 	default:
-		if value == "-" {
-			return ""
-		}
 		return value
 	}
 

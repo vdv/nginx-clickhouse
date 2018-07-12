@@ -13,14 +13,33 @@ clickhouse:
   user: default
   password:
  columns:
-   RemoteAddr: remote_addr
-   RemoteUser: remote_user
-   TimeLocal: time_local
-   Request: request
-   Status: status
-   BytesSent: bytes_sent
-   HttpReferer: http_referer
-   HttpUserAgent: http_user_agent
+   RemoteAddr:
+    var_name: remote_addr
+    var_type: string
+   RemoteUser:
+    var_name: remote_user
+    var_type: string
+   TimeLocal:
+    var_name: time_local
+    var_type: datetime
+   Request:
+    var_name: request
+    var_type: string
+   RequestTime:
+    var_name: request
+    var_type: float
+   Status:
+    var_name: status
+    var_type: integer
+   BytesSent:
+    var_name: bytes_sent
+    var_type: integer
+   HttpReferer:
+    var_name: http_referer
+    var_type: string
+   HttpUserAgent:
+    var_name: http_user_agent
+    var_type: string
 
 # NGINX
 nginx:

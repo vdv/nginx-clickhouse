@@ -1,16 +1,16 @@
 # build stage
 FROM golang:alpine AS build-env
 
-WORKDIR /go/src/nginx-clickhouse
+WORKDIR /go/src/github.com/vdv/nginx-clickhouse
 
 RUN apk update && apk add make g++ git curl
 
-ADD . /go/src/nginx-clickhouse
-RUN cd /go/src/nginx-clickhouse && go get -v .
-RUN cd /go/src/nginx-clickhouse && make build
+COPY . /go/src/github.com/vdv/nginx-clickhouse
+RUN cd /go/src/github.com/vdv/nginx-clickhouse && go get -v .
+RUN cd /go/src/github.com/vdv/nginx-clickhouse && make build
 
 # final stage
 FROM scratch
 
-COPY --from=build-env /go/src/nginx-clickhouse/nginx-clickhouse /
+COPY --from=build-env /go/src/github.com/vdv/nginx-clickhouse/nginx-clickhouse /
 CMD [ "/nginx-clickhouse" ]
